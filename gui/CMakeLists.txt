@@ -1,7 +1,7 @@
 ﻿cmake_minimum_required(VERSION 3.5)
 
-project(MainWindow LANGUAGES CXX)
-
+#project(MainWindow LANGUAGES CXX)
+set(GUI_LIB MainWindow)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
@@ -34,21 +34,21 @@ include_directories(${INCLUDE_DIRS})
 file(GLOB_RECURSE SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 ############################# 创建动态库 ######################################
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
+add_library(${GUI_LIB} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
 
 #########################################################################
 # 针对 Windows 平台的特殊设置
 if (WIN32)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_DATA_DEFINE_DLL)
+    target_compile_definitions(${GUI_LIB} PRIVATE BUILD_DATA_DEFINE_DLL)
 endif()
 
 # 设置库的包含目录和链接库
-target_include_directories(${PROJECT_NAME} PRIVATE
+target_include_directories(${GUI_LIB} PRIVATE
         ${INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}/source_lib/SARibbonBar  # 假设SARibbonBar头文件所在目录
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(${GUI_LIB} PRIVATE
         Qt${QT_VERSION_MAJOR}::Core
         Qt${QT_VERSION_MAJOR}::Gui
         Qt${QT_VERSION_MAJOR}::Widgets

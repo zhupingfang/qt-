@@ -2,8 +2,10 @@
 # Cmake的命令不区分大小写，例如message，set等命令；但Cmake的变量区分大小写
 # 为统一风格，本项目的Cmake命令全部采用小写，变量全部采用大写加下划线组合。
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.12)
 
+#set(CMAKE_SIZEOF_VOID_P 8)  # 强制使用 64 位
+##################################################################################################
 set(CMAKE_CXX_STANDARD 17)
 set(SARIBBON_VERSION_MAJOR 2)
 set(SARIBBON_VERSION_MINOR 0)
@@ -33,18 +35,28 @@ message(STATUS "current Qt version is Qt${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.
 
 
 # 设置Boost和OpenCV的路径
-set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/source_lib/boost")
-set(OpenCV_DIR "${CMAKE_SOURCE_DIR}/source_lib/build")
+#set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/source_lib/boost")
+#
+## 设置 Boost 库为静态链接
+#set(Boost_USE_STATIC_LIBS ON)
+#find_package(Boost REQUIRED COMPONENTS program_options filesystem system)
+#include_directories(${Boost_INCLUDE_DIRS})
+#message(STATUS "Boost include directories: ${Boost_INCLUDE_DIRS}")
 
-# 查找Boost库
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
-
+##################################################################################################
 # 查找OpenCV库
+set(OpenCV_DIR "${CMAKE_SOURCE_DIR}/source_lib/build")
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
+# python
+set(SOURCE_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source_lib")
+if(MINGW)
+    # python 新版本对于c++ 17 以上一些文件不兼容的现象
+    add_compile_options(-D_hypot=hypot -fpermissive)
+endif()
 
+##################################################################################################
 # 根据qt版本确认能否使用frameless库，目前frameless库支持qt5.14,qt5.15,qt6.1+,除了上诉版本，都使用不了
 # 上述版本的qt如果设置SARIBBON_USE_FRAMELESS_LIB=ON也会改为OFF
 if(SARIBBON_USE_FRAMELESS_LIB)
@@ -156,4 +168,6 @@ if(SARIBBON_USE_FRAMELESS_LIB)
 endif()
 add_subdirectory(source_lib)
 add_subdirectory(gui)
-add_subdirectory(src)
+add_subdirectory(python)
+add_subdirectory(core)
+add_subdirectory(iRadio)
