@@ -16,10 +16,10 @@ target_link_libraries(testWindow
 target_include_directories(testWindow
         PRIVATE
         ${OpenCV_INCLUDE_DIRS}
-        ${CMAKE_SOURCE_DIR}/gui  # 添加 gui 目录的包含路径
+#        ${CMAKE_SOURCE_DIR}/gui  # 添加 gui 目录的包含路径
         ${CMAKE_SOURCE_DIR}/python  # 添加 gui 目录的包含路径
 )
-
+#########################################################################
 # 定义一个自定义命令，将 GUI 动态库和 SARibbonBar 的 DLL 拷贝到可执行文件目录
 add_custom_command(TARGET testWindow POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different

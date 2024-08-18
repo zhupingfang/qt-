@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 
 set(IRADIO_PYTHON_LIB iRadio_python)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 #########################################################################
 # 设置Python库的包含路径
@@ -39,5 +42,10 @@ add_library(${IRADIO_PYTHON_LIB} SHARED ${SOURCE_FILES})
 
 #########################################################################
 # 设置包含目录和链接库为PUBLIC，使得链接到这个库的其他目标也能继承这些设置
-target_include_directories(${IRADIO_PYTHON_LIB} PUBLIC ${Python_INCLUDE_DIRS})
-target_link_libraries(${IRADIO_PYTHON_LIB} PUBLIC ${Python_LIBRARIES})
+
+target_link_libraries(${IRADIO_PYTHON_LIB} PUBLIC
+        ${Python_LIBRARIES}
+        Qt${QT_VERSION_MAJOR}::Core
+)
+
+target_include_directories(${IRADIO_PYTHON_LIB} PUBLIC ${Python_INCLUDE_DIRS} ${INCLUDE_DIRS})

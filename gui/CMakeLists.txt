@@ -43,7 +43,7 @@ if (WIN32)
 endif()
 
 # 设置库的包含目录和链接库
-target_include_directories(${GUI_LIB} PRIVATE
+target_include_directories(${GUI_LIB} INTERFACE
         ${INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}/source_lib/SARibbonBar  # 假设SARibbonBar头文件所在目录
 )

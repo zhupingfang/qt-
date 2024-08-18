@@ -6,13 +6,15 @@
 #include <QDebug>
 #include <QElapsedTimer>
 #include "SARibbonBar.h"
+#include <opencv2/opencv.hpp>
+
 // 重定向qdebug的打印
 
 //using namespace boost::asio;
 //using namespace boost::filesystem;
 //namespace po = boost::program_options;
 
-#include "test/test.h"
+#include "test.h"
 
 int main(int argc, char* argv[])
 {

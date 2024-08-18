@@ -1,9 +1,8 @@
 
 
 #include "test.h"
-#include <Python.h>
 #include <iostream>
-
+#include <Python.h>
 
 void MyPythonTest::TestPython() {
 // 初始化 Python 解释器

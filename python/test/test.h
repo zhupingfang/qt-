@@ -5,11 +5,19 @@
 #ifndef TEST_H
 #define TEST_H
 
+#define QT_NO_KEYWORDS
+#include <QObject>
+#include <QDebug>
 
-class MyPythonTest
+
+class MyPythonTest : public QObject
 {
+	Q_OBJECT
 public:
 	void TestPython();
+
+Q_SIGNALS:
+	void DataChangeSg();
 };
 
 
