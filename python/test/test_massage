@@ -1,239 +1,27 @@
-这是python文件夹下的cmake:
-cmake_minimum_required(VERSION 3.12)
+QLayout: Attempting to add QLayout "" to ButtomToolBar "", which already has a layout
+Python path configuration:
+  PYTHONHOME = (not set)
+  PYTHONPATH = (not set)
+  program name = 'python'
+  isolated = 0
+  environment = 1
+  user site = 1
+  import site = 1
+  sys._base_executable = 'D:\\simulation\\home\\demo2\\CAE\\cmake-build-release\\iRadio\\iRadio.exe'
+  sys.base_prefix = ''
+  sys.base_exec_prefix = ''
+  sys.executable = 'D:\\simulation\\home\\demo2\\CAE\\cmake-build-release\\iRadio\\iRadio.exe'
+  sys.prefix = ''
+  sys.exec_prefix = ''
+  sys.path = [
+    'D:\\simulation\\home\\demo2\\CAE\\cmake-build-release\\iRadio\\python38.zip',
+    '.\\DLLs',
+    '.\\lib',
+    'D:\\simulation\\home\\demo2\\CAE\\cmake-build-release\\iRadio',
+  ]
+Fatal Python error: init_fs_encoding: failed to get the Python codec of the filesystem encoding
+Python runtime state: core initialized
+ModuleNotFoundError: No module named 'encodings'
 
-set(IRADIO_PYTHON_LIB iRadio_python)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
-#########################################################################
-# 设置Python库的包含路径
-set(Python3_EXECUTABLE "${SOURCE_LIB_DIR}/Python38/python.exe")
-set(Python3_LIBRARY "${SOURCE_LIB_DIR}/Python38/libs/python3.lib")
-set(Python3_INCLUDE_DIR "${SOURCE_LIB_DIR}/Python38/include")
-
-if(MINGW)
-    # python 新版本对于c++ 17 以上一些文件不兼容的现象
-    add_compile_options(-D_hypot=hypot -fpermissive)
-endif()
-
-include_directories("${Python3_INCLUDE_DIR}")
-find_package(Python3 REQUIRED COMPONENTS Interpreter)
-link_directories(${Python3_LIBRARY_DIRS})
-
-#########################################################################
-# 递归获取当前目录及其子目录中的所有 .h 文件
-file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-set(INCLUDE_DIRS)
-foreach(HEADER_FILE ${HEADER_FILES})
-    get_filename_component(DIR ${HEADER_FILE} DIRECTORY)
-    list(APPEND INCLUDE_DIRS ${DIR})
-endforeach()
-# 去除重复的路径
-list(REMOVE_DUPLICATES INCLUDE_DIRS)
-# 输出包含路径（可选，用于调试）
-message(STATUS "Include directories: ${INCLUDE_DIRS}")
-# 设置包含目录
-include_directories(${INCLUDE_DIRS})
-
-#########################################################################
-file(GLOB_RECURSE SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
-
-#########################################################################
-# 编译成一个库
-add_library(${IRADIO_PYTHON_LIB} SHARED ${SOURCE_FILES})
-
-#########################################################################
-# 设置包含目录和链接库为PUBLIC，使得链接到这个库的其他目标也能继承这些设置
-
-target_link_libraries(${IRADIO_PYTHON_LIB} PRIVATE
-        "${SOURCE_LIB_DIR}/Python38/python38.dll"
-        Qt5::Core
-)
-
-target_include_directories(${IRADIO_PYTHON_LIB} PUBLIC ${Python_INCLUDE_DIRS} ${INCLUDE_DIRS})
-这是编译报错：
-FAILED: python/libiRadio_python.dll python/libiRadio_python.dll.a 
-C:\windows\system32\cmd.exe /C "cd . && "D:\soft\clion\CLion 2024.1.4\bin\mingw\bin\g++.exe" -O3 -DNDEBUG   -shared -o python\libiRadio_python.dll -Wl,--out-implib,python\libiRadio_python.dll.a -Wl,--major-image-version,0,--minor-image-version,0 python/CMakeFiles/iRadio_python.dir/iRadio_python_autogen/mocs_compilation.cpp.obj python/CMakeFiles/iRadio_python.dir/base/PyAgent.cpp.obj python/CMakeFiles/iRadio_python.dir/base/PyInterpreter.cpp.obj python/CMakeFiles/iRadio_python.dir/base/PythonModuleAPI.cpp.obj python/CMakeFiles/iRadio_python.dir/test.cpp.obj  D:/simulation/home/demo2/CAE/MinGW3rdParty/Python38/python38.dll  D:/soft/qt_13/5.13.0/mingw73_64/lib/libQt5Core.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 && cd ."
-D:\soft\clion\CLion 2024.1.4\bin\mingw\bin/ld.exe: python/CMakeFiles/iRadio_python.dir/iRadio_python_autogen/mocs_compilation.cpp.obj:mocs_compilation.cpp:(.text+0x33): undefined reference to `__imp__ZN2Py11PythonAgent16staticMetaObjectE'
-D:\soft\clion\CLion 2024.1.4\bin\mingw\bin/ld.exe: python/CMakeFiles/iRadio_python.dir/iRadio_python_autogen/mocs_compilation.cpp.obj:mocs_compilation.cpp:(.text+0x93): undefined reference to `__imp__ZN2Py11PythonAgent16staticMetaObjectE'
-D:\soft\clion\CLion 2024.1.4\bin\mingw\bin/ld.exe: python/CMakeFiles/iRadio_python.dir/iRadio_python_autogen/mocs_compilation.cpp.obj:mocs_compilation.cpp:(.text+0xcb): undefined reference to `__imp__ZN2Py11PythonAgent16staticMetaObjectE'
-D:\soft\clion\CLion 2024.1.4\bin\mingw\bin/ld.exe: python/CMakeFiles/iRadio_python.dir/iRadio_python_autogen/mocs_compilation.cpp.obj:mocs_compilation.cpp:(.text+0x1e8): undefined reference to `__imp__ZN2Py11PythonAgent16staticMetaObjectE'
-D:\soft\clion\CLion 2024.1.4\bin\mingw\bin/ld.exe: python/CMakeFiles/iRadio_python.dir/iRadio_python_autogen/mocs_compilation.cpp.obj:mocs_compilation.cpp:(.text.startup+0xa): undefined reference to `__imp__ZN2Py11PythonAgent16staticMetaObjectE'
-collect2.exe: error: ld returned 1 exit status
-这是PyAgent.h文件：
-//
-// Created by zWX1304078 on 24-8-19.
-//
-
-#ifndef IRADIO_PYAGENT_H
-#define IRADIO_PYAGENT_H
-
-#define QT_NO_KEYWORDS
-
-#include <QObject>
-#include <QStringList>
-#include "PythonModuleAPI.h"
-
-namespace GUI
-{
-    class MainWindow;
-}
-
-namespace Py
-{
-    class PyInterpreter;
-    class ScriptReader;
-    class RecordThread;
-
-    class PYTHONMODULEAPI PythonAgent : public QObject
-{
-    Q_OBJECT
-    public:
-    static PythonAgent *getInstance();
-    void initialize(GUI::MainWindow *m);
-    void finalize();
-    void submit(QString code, bool save = true);
-    //后台执行，不在界面显示，也不保存
-    void backstageExec(QString code);
-    void submit(QStringList codes, bool save = true);
-    void saveScript(QString fileName);
-    bool execScript(QString fileName);
-    void appCodeList(QString code);
-    void lock();
-    void unLock();
-    bool isLocked();
-    void appendOn();
-    void appendOff();
-    void execMessWinCode(QString code);
-    QStringList getcodelist();
-    void setNoGUI(bool nogui);
-
-    Q_SIGNALS:
-//    void printInfo(Common::Message type, QString m);
-    void closeMainWindow();
-
-    private:
-    PythonAgent();
-    ~PythonAgent() = default;
-    void connectSignals();
-
-    void readerFinished();
-
-    private:
-    static PythonAgent *_instance;
-    PyInterpreter *_interpreter{};
-    RecordThread *_recordScript{};
-    GUI::MainWindow *_mainWindow{};
-    ScriptReader *_reader{};
-    bool _islock{false};
-    bool _append{true};
-
-    bool _noGUI{false};
-};
-}
-
-#endif //IRADIO_PYAGENT_H
-这是cpp文件：
-//
-// Created by zWX1304078 on 24-8-19.
-//
-
-#include "PyAgent.h"
-#include <Python.h>
-#include "PyInterpreter.h"
-#include "PyAgent.h"
-#include <QCoreApplication>
-#include <QDebug>
-#include <QDir>
-#include <QByteArray>
-#include <string>
-#include <QReadWriteLock>
-//#include "Common/Types.h"
-//#include "Common/DebugLogger.h"
-
-namespace Py {
-
-    bool PyInterpreter::init(PythonAgent* agent)
-    {
-        if(!Py_IsInitialized()) {
-            return false;
-        }
-        _agent = agent;
-        PyErr_PrintEx(1);
-        this->execCode("import sys", false);
-        this->execCode("import os", false);
-        QString path = QDir::cleanPath(qApp->applicationDirPath());
-        QString qs	 = QString("sys.path.append(\"%1\")").arg(path);
-        this->execCode(qs, false);
-
-        QDir		dir(path);
-        QStringList suffix;
-        suffix << "*.py";
-        dir.setNameFilters(suffix);
-        QList<QFileInfo> files = dir.entryInfoList(suffix);
-        for(int i = 0; i < files.size(); ++i) {
-            QFileInfo fileinfo = files.at(i);
-            QString	  name	   = fileinfo.baseName();
-            QString	  command  = QString("import %1").arg(name);
-            this->execCode(command, false);
-        }
-
-        return true;
-    }
-
-    int PyInterpreter::execCode(QString code, bool save)
-    {
-        QReadWriteLock lock;
-        lock.lockForRead();
-        std::string s = code.toStdString();
-        const char* c = s.c_str();
-
-//        DebugInfo("Exec python script: %s\n", code.toStdString().c_str());
-
-        int ok = PyRun_SimpleStringFlags(c, NULL);
-
-        if(ok == -1) {
-            QString error = QString(tr("Exception occurred at: \"%1\"")).arg(code);
-//            _agent->printInfo(Common::Message::Warning, error);
-        }
-
-        if(save)
-            _codelist.append(code);
-        lock.unlock();
-        return ok;
-    }
-
-    void PyInterpreter::execFile(QString file)
-    {
-        QByteArray la = file.toLocal8Bit();
-        char*	   c  = la.data();
-        FILE*	   fp = nullptr;
-        fp			  = fopen(c, "r");
-        if(fp != nullptr)
-            PyRun_SimpleFile(fp, c);
-    }
-
-    int PyInterpreter::getCodeCount()
-    {
-        return _codelist.size();
-    }
-
-    QString PyInterpreter::getCodeAt(int i)
-    {
-        QString c;
-        if(i >= 0 && i < _codelist.size())
-            c = _codelist.at(i);
-        return c;
-    }
-
-    void PyInterpreter::codeListAppend(QString qs)
-    {
-        _codelist.append(qs);
-    }
-
-    QStringList PyInterpreter::getCode()
-    {
-        return _codelist;
-    }
-} // namespace Py
+Current thread 0x000082f0 (most recent call first):
+<no Python frame>
