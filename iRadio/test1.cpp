@@ -1,10 +1,4 @@
-/*
- * Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
- * Description: xxx
- * Author: zhupingfang
- * Create: 2020-10-8
- * Note  : add ShowNetsInfo() for ConstraintEdit by liminglei 2021-7-19
- */
+
 #include "elements_report_dialog_view_ctrl.h"
 #include "layout_common.h"
 #include "cmd_keywords.h"
